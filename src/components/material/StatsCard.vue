@@ -44,7 +44,6 @@
       <v-spacer/>
       <slot/>
     </template>
-    
   </material-card>
 </template>
 

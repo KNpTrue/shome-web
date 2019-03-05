@@ -15,5 +15,6 @@
   "open": "Open",
   "close": "Close",
   "templ": "Temperature",
-  "no devices": "No Devices"
+  "no devices": "No Devices",
+  "add_room": "Add Room"
 }

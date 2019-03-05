@@ -4,7 +4,7 @@
     fluid
     grid-list-xl
   >
-    <v-layout warp align-center justify-center v-if="devlist.length == 0">
+    <v-layout warp align-center justify-center class="text-xs-center" v-if="devlist.length == 0">
       <h4 style="margin-top:200px">{{ $t('no devices') }}</h4>
     </v-layout>
     <v-layout wrap>
@@ -26,7 +26,7 @@
           :sub-icon-color="dev.online ? 'yellow' : ''"
           :sub-text="dev.online ? devMsg(dev) : '未在线'"
         >
-          <v-btn flat icon v-if="!isDevSensor(dev.type)">
+          <v-btn flat icon v-if="isDevHaveSwitch(dev)">
               <v-icon :color="isDevOpen(dev) ? 'blue' : ''" style="margin-top:2px">mdi-power</v-icon>
           </v-btn>
           <v-btn flat icon>
@@ -45,35 +45,22 @@ import {devSensorTypeList, devIconColorList} from '@/config/dev.js'
 
 export default {
   data: () => ({
-
   }),
   computed: {
     ...mapState(['devlist', 'selroom']),
 
   },
   methods: {
-    isDevSensor (type) { //设备是否为sensor
-      for (var i = 0, len = devSensorTypeList.length; i < len; i++) {
-        if(type === devSensorTypeList[i]) return true;
-      }
-      return false;
-    },
     devMsg (dev) { //dev中的信息显示
-      if (this.isDevSensor(dev.type)) {
-        var keylist = dev.keylist;
-        for (var i = 0, len = keylist.length; i < len; i++) {
-          return  this.$t(keylist[i].name) + keyMethods.getKeyValue(keylist[i]) + keylist[i].unit;
+      let msg = '', keylist = dev.keylist;
+      for (let i = 0, len = keylist.length; i < len; i++) {
+        if (keylist[i].name === 'isOpen') {
+          msg += this.$t(keyMethods.getKeyValue(keylist[i])) + ' ';
         }
-      } else { //switch
-        var keylist = dev.keylist;
-        for (var i = 0, len = keylist.length; i < len; i++) {
-            if (keylist[i].name === 'isOpen') {
-                if (keylist[i].type !== 'bool')  break;
-                return this.$t(keyMethods.getKeyValue(keylist[i]));
-            }
-        }
-        return '';
+        if (keylist[i].mode == 'rw')  continue;
+        msg += this.$t(keylist[i].name) + keyMethods.getKeyValue(keylist[i]) + keylist[i].unit + ' ';
       }
+      return msg;
     },
     isRoomSel (room) {
       return this.selroom == 'all' ? true : (room == this.selroom);
@@ -84,6 +71,9 @@ export default {
     },
     isDevOpen (dev) {
       return keyMethods.getKey(dev.keylist, 'isOpen').value;
+    },
+    isDevHaveSwitch(dev) {
+      return keyMethods.getKey(dev.keylist, 'isOpen') != undefined;
     }
   }
 }

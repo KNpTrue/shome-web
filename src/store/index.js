@@ -5,6 +5,7 @@ import state from './state'
 import mutations from './mutations'
 import getters from './getters'
 import actions from './actions'
+import websocket from './modules/websocket'
 
 Vue.use(Vuex)
 
@@ -12,5 +13,8 @@ export default new Vuex.Store({
   state,
   mutations,
   getters,
-  actions
+  actions,
+  modules: {
+    websocket
+  }
 })
