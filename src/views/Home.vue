@@ -1,0 +1,90 @@
+﻿<template>
+  <v-container
+    fill-height
+    fluid
+    grid-list-xl
+  >
+    <v-layout warp align-center justify-center v-if="devlist.length == 0">
+      <h4 style="margin-top:200px">{{ $t('no devices') }}</h4>
+    </v-layout>
+    <v-layout wrap>
+      <v-flex
+        v-for="dev in devlist"
+        v-if="isRoomSel(dev.room)"
+        :key="dev.id"
+        sm6
+        xs12
+        md6
+        lg4
+      >
+        <material-stats-card
+          :color="getIconColorItem(dev.type).color"
+          :icon="getIconColorItem(dev.type).icon"
+          :title="dev.room"
+          :value="dev.name"
+          sub-icon="mdi-circle"
+          :sub-icon-color="dev.online ? 'yellow' : ''"
+          :sub-text="dev.online ? devMsg(dev) : '未在线'"
+        >
+          <v-btn flat icon v-if="!isDevSensor(dev.type)">
+              <v-icon :color="isDevOpen(dev) ? 'blue' : ''" style="margin-top:2px">mdi-power</v-icon>
+          </v-btn>
+          <v-btn flat icon>
+              <v-icon style="margin-top:2px">mdi-menu</v-icon>
+          </v-btn>
+        </material-stats-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</template>
+
+<script>
+import keyMethods from '@/utils/key.js'
+import { mapState } from 'vuex'
+import {devSensorTypeList, devIconColorList} from '@/config/dev.js'
+
+export default {
+  data: () => ({
+
+  }),
+  computed: {
+    ...mapState(['devlist', 'selroom']),
+
+  },
+  methods: {
+    isDevSensor (type) { //设备是否为sensor
+      for (var i = 0, len = devSensorTypeList.length; i < len; i++) {
+        if(type === devSensorTypeList[i]) return true;
+      }
+      return false;
+    },
+    devMsg (dev) { //dev中的信息显示
+      if (this.isDevSensor(dev.type)) {
+        var keylist = dev.keylist;
+        for (var i = 0, len = keylist.length; i < len; i++) {
+          return  this.$t(keylist[i].name) + keyMethods.getKeyValue(keylist[i]) + keylist[i].unit;
+        }
+      } else { //switch
+        var keylist = dev.keylist;
+        for (var i = 0, len = keylist.length; i < len; i++) {
+            if (keylist[i].name === 'isOpen') {
+                if (keylist[i].type !== 'bool')  break;
+                return this.$t(keyMethods.getKeyValue(keylist[i]));
+            }
+        }
+        return '';
+      }
+    },
+    isRoomSel (room) {
+      return this.selroom == 'all' ? true : (room == this.selroom);
+      //return true;
+    },
+    getIconColorItem (type) {
+      return devIconColorList.find(item => item.type == type);
+    },
+    isDevOpen (dev) {
+      return keyMethods.getKey(dev.keylist, 'isOpen').value;
+    }
+  }
+}
+</script>

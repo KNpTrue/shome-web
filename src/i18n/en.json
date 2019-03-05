@@ -1,0 +1,19 @@
+﻿{
+  "home": "Home",
+  "scene": "Scene",
+  "log": "Log",
+  "settings": "Setting",
+  "author": "KNp_True",
+  "about": "About",
+  "blog": "Blog",
+  "homepage": "Home Page",
+  "all": "ALL",
+  "room_edit": "Room Edit",
+  "login": "Login",
+  "close_window": "Close Window",
+  "password": "Password",
+  "open": "Open",
+  "close": "Close",
+  "templ": "Temperature",
+  "no devices": "No Devices"
+}
