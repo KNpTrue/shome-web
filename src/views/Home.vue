@@ -39,9 +39,10 @@
 </template>
 
 <script>
-import keyMethods from '@/utils/key.js'
+import keyMethods from '@/utils/key-method'
+import KEY from '@/utils/key-type'
+import {devIconColorList} from '@/utils/dev'
 import { mapState } from 'vuex'
-import {devSensorTypeList, devIconColorList} from '@/config/dev.js'
 
 export default {
   data: () => ({
@@ -57,7 +58,7 @@ export default {
         if (keylist[i].name === 'isOpen') {
           msg += this.$t(keyMethods.getKeyValue(keylist[i])) + ' ';
         }
-        if (keylist[i].mode == 'rw')  continue;
+        if (keylist[i].mode == KEY.mode.readwrite)  continue;
         msg += this.$t(keylist[i].name) + keyMethods.getKeyValue(keylist[i]) + keylist[i].unit + ' ';
       }
       return msg;

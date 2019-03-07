@@ -9,7 +9,7 @@
   "homepage": "首页",
   "all": "全部",
   "room-edit": "房间管理",
-  "login": "登陆",
+  "login": "登录",
   "close_window": "关闭窗口",
   "password": "密码",
   "open": "已开启",
@@ -18,5 +18,6 @@
   "no devices": "没有设备",
   "add_room": "添加房间",
   "password is required": "密码不能为空",
-  "please input password to login": "请输入密码登录"
+  "please input password to login": "请输入密码登录",
+  "can't connect server or password error": "无法连接服务器或密码错误"
 }

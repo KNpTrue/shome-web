@@ -2,15 +2,16 @@
  * key.js
  * 放置处理key的方法
 */
+import KEY from './key-type'
 //根据name查找Key
 const getKey = (keylist, name) => keylist.find(item => item.name == name); 
-
-const getKeyValue = function (key) { //获取KeyValue
-  if (key.type == 'bool')
+//获取KeyValue
+const getKeyValue = function (key) { 
+  if (key.type == KEY.type.bool)
     return key.value ? 'open' : 'close';
-  else if (key.type == 'number')
+  else if (key.type == KEY.type.number)
     return key.value;
-  else if (key.type == 'range') {
+  else if (key.type == KEY.type.range) {
     return key.value.split('/', 1)[0];
   }
 }

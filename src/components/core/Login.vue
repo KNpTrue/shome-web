@@ -12,10 +12,11 @@
           >
             <v-text-field
               v-model="password"
-              :label= "$t('password') + '*'"
+              :label= "$t(label) + '*'"
               type="password"
               required
               :rules="passwdRules"
+              @click="onClickPassWord"
             >
               <template v-slot:prepend>
                 <v-tooltip
@@ -31,7 +32,7 @@
                 <v-progress-circular
                   v-if="loading"
                   size="24"
-                  color="info"
+                  color="purple"
                   indeterminate
                 ></v-progress-circular>
               </template>
@@ -50,7 +51,8 @@
 
 
 <script>
-import {mapActions} from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+import md5 from 'blueimp-md5'
 
   export default {
     data () {
@@ -58,28 +60,50 @@ import {mapActions} from 'vuex'
         valid: true,
         dialog: true,
         loading: false,
-        password: "",
+        label: "password",
+        password: '',
         passwdRules: [
           v=> !! v || this.$t('password is required')
         ]
       }
     },
     methods: {
-      ...mapActions(['initWebSocket']),
+      ...mapGetters('websocket', ['getOnline', 'getWebSocket']),
+      ...mapActions('websocket', ['initWebSocket']),
+      ...mapMutations('websocket', ['setPassword']),
       onClickClose() { //关闭
         window.opener=null;
         window.open('','_self');
         window.close();
       },
       onClickLogin() {
-        this.loading = true;
-        setTimeout(() => {
-          this.loading = false
-        }, 4000)
+        if(this.password == '')  return;
+        this.valid = false;
         if(!this.$refs.form.validate()) return;
-        this.initWebSocket(this.password);
-        //this.dialog = false;
-      }
+        let passwdMd5 = md5(this.password); //md5加密
+        this.initWebSocket(passwdMd5);
+        this.loading = true;
+        let i = 0;
+        let handler = setInterval(() => { //循环查看是否
+          i++;
+          if(this.getOnline() == true) {
+            this.loading = false;
+            this.dialog = false;
+            this.setPassword(passwdMd5);
+            clearInterval(handler);
+          } else {
+            if (i > 5) {
+              clearInterval(handler); //停止循环
+              this.loading = false;
+              this.label = "can't connect server or password error";
+              this.$refs.form.reset();
+            }
+          }
+        }, 1000)
+      },      
+      onClickPassWord() {
+        this.label = 'password';
+      },
     }
   }
 </script>
