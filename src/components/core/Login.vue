@@ -51,14 +51,13 @@
 
 
 <script>
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
 import md5 from 'blueimp-md5'
 
   export default {
     data () {
       return {
         valid: true,
-        dialog: true,
         loading: false,
         label: "password",
         password: '',
@@ -66,6 +65,9 @@ import md5 from 'blueimp-md5'
           v=> !! v || this.$t('password is required')
         ]
       }
+    },
+    computed: {
+      ...mapState('websocket', ['dialog'])
     },
     methods: {
       ...mapGetters('websocket', ['getOnline', 'getWebSocket']),
@@ -88,8 +90,7 @@ import md5 from 'blueimp-md5'
           i++;
           if(this.getOnline() == true) {
             this.loading = false;
-            this.dialog = false;
-            this.setPassword(passwdMd5);
+            this.password = '';
             clearInterval(handler);
           } else {
             if (i > 5) {

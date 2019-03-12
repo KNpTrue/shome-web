@@ -19,5 +19,6 @@
   "add_room": "添加房间",
   "password is required": "密码不能为空",
   "please input password to login": "请输入密码登录",
-  "can't connect server or password error": "无法连接服务器或密码错误"
+  "can't connect server or password error": "无法连接服务器或密码错误",
+  "dev-detail": "设备详情"
 }

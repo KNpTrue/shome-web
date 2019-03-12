@@ -3,5 +3,5 @@
 export default {
   setDrawer: set('drawer'),
   toggleDrawer: toggle('drawer'),
-  setSelRoom: set('selroom')
+  setSelRoom: set('selroom'),
 }

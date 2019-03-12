@@ -25,5 +25,10 @@ export default [
     path: '/room-edit',
     name: 'room-edit',
     view: 'RoomEdit'
+  },
+  {
+    path: '/dev-detail',
+    name: 'dev-detail',
+    view: 'DevDetail'
   }
 ]

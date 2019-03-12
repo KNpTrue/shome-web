@@ -38,7 +38,7 @@
       />
     </helper-offset>
 
-    <v-card-text>
+    <v-card-text :class="{nodisplay: no_card_text}">
       <slot />
     </v-card-text>
 
@@ -85,6 +85,10 @@ export default {
     text: {
       type: String,
       default: undefined
+    },
+    no_card_text: {
+      type: Boolean, 
+      default: false
     }
   },
 
@@ -114,5 +118,8 @@ export default {
         border-radius: 4px;
       }
     }
+  }
+  .nodisplay {
+    display: none;
   }
 </style>

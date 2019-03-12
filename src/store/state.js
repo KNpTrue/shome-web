@@ -9,7 +9,8 @@
     { name: '智能灯', id: 'axzoenfis', online: true, type: 2, room: '客房', keylist: [{ name: 'isOpen', type: 3, mode:1, value: true, unit: ''}]},
     { name: '温湿度传感器', id: 'axsewnfis', online: true, type: 3, room: '饭厅', keylist: [{ name: 'templ', type: 0, mode:0, value: '26', unit: '℃'}]},
   ],
-  selroom: 'all', //被选中的房间
+  todolist: [],
+  setlist: [],
   roomlist: [ //房间列表
     {name: 'all'},
     {name: '客厅', devIdList: ['awdascaw', 'awdascaw']},
@@ -17,4 +18,6 @@
     {name: '客房', devIdList: ['axzoenfis']},
     {name: '饭厅', devIdList: ['axsewnfis']},
   ],
+  selroom: 'all', //被选中的房间
+  devid: '' //设备详情的id
 }

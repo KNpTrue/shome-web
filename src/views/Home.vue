@@ -26,10 +26,17 @@
           :sub-icon-color="dev.online ? 'yellow' : ''"
           :sub-text="dev.online ? devMsg(dev) : '未在线'"
         >
-          <v-btn flat icon v-if="isDevHaveSwitch(dev)">
-              <v-icon :color="isDevOpen(dev) ? 'blue' : ''" style="margin-top:2px">mdi-power</v-icon>
+          <v-btn flat 
+            icon 
+            v-if="isDevHaveSwitch(dev.keylist)"
+            @click="changeKeyValue({dev: dev, keyname: 'isOpen', value: !isDevOpen(dev.keylist)})"
+          >
+              <v-icon :color="isDevOpen(dev.keylist) ? 'blue' : ''" style="margin-top:2px">mdi-power</v-icon>
           </v-btn>
-          <v-btn flat icon>
+          <v-btn flat 
+            icon
+            @click="onclickDetail(dev)"
+          >
               <v-icon style="margin-top:2px">mdi-menu</v-icon>
           </v-btn>
         </material-stats-card>
@@ -40,9 +47,11 @@
 
 <script>
 import keyMethods from '@/utils/key-method'
-import KEY from '@/utils/key-type'
+import KEY from '@/utils/key-enum'
 import {devIconColorList} from '@/utils/dev'
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import WEB from '@/utils/web-enum'
+import webMethod from '@/utils/web-method'
 
 export default {
   data: () => ({
@@ -52,6 +61,8 @@ export default {
 
   },
   methods: {
+    ...mapMutations('websocket', ['sendToServer']),
+    ...mapActions('websocket', ['changeKeyValue']),
     devMsg (dev) { //dev中的信息显示
       let msg = '', keylist = dev.keylist;
       for (let i = 0, len = keylist.length; i < len; i++) {
@@ -59,7 +70,7 @@ export default {
           msg += this.$t(keyMethods.getKeyValue(keylist[i])) + ' ';
         }
         if (keylist[i].mode == KEY.mode.readwrite)  continue;
-        msg += this.$t(keylist[i].name) + keyMethods.getKeyValue(keylist[i]) + keylist[i].unit + ' ';
+        msg += keylist[i].name + keyMethods.getKeyValue(keylist[i]) + keylist[i].unit + ' ';
       }
       return msg;
     },
@@ -70,11 +81,10 @@ export default {
     getIconColorItem (type) {
       return devIconColorList.find(item => item.type == type);
     },
-    isDevOpen (dev) {
-      return keyMethods.getKey(dev.keylist, 'isOpen').value;
-    },
-    isDevHaveSwitch(dev) {
-      return keyMethods.getKey(dev.keylist, 'isOpen') != undefined;
+    isDevOpen: keyMethods.isDevOpen,
+    isDevHaveSwitch: keyMethods.isDevHaveSwitch,
+    onclickDetail(dev) {
+      this.$router.push({path: '/dev-detail', query: {devId: dev.id}});
     }
   }
 }

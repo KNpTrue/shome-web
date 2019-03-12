@@ -1,4 +1,4 @@
-﻿import DEV from './dev-type'
+﻿import DEV from './dev-enum'
 const devIconColorList = [ //根据类型来确定icon
   {type: DEV.light, icon: 'mdi-lightbulb-on-outline', color: 'success'},
   {type: DEV.switch, icon: 'mdi-switch', color: 'warning'},

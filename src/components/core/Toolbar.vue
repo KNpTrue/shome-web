@@ -11,7 +11,7 @@
       >
         <v-fab-transition mode="out-in">
           <v-btn
-            v-if="responsive && routeName == 'room-edit'"
+            v-if="responsive && isShowBackBtn(routeName)"
             class="default v-btn--simple"
             dark
             icon
@@ -21,7 +21,7 @@
             <v-icon>mdi-arrow-left</v-icon>
           </v-btn>
           <v-btn
-            v-if="responsive && routeName != 'room-edit'"
+            v-if="responsive && !isShowBackBtn(routeName)"
             class="default v-btn--simple"
             dark
             icon
@@ -96,6 +96,9 @@ export default {
       } else {
         this.responsive = false;
       }
+    },
+    isShowBackBtn(routeName) {
+        return ['room-edit', 'dev-detail'].find(item => item == routeName) != undefined
     }
   }
 };
