@@ -54,57 +54,57 @@
 import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
 import md5 from 'blueimp-md5'
 
-  export default {
-    data () {
-      return {
-        valid: true,
-        loading: false,
-        label: "password",
-        password: '',
-        passwdRules: [
-          v=> !! v || this.$t('password is required')
-        ]
-      }
-    },
-    computed: {
-      ...mapState('websocket', ['dialog'])
-    },
-    methods: {
-      ...mapGetters('websocket', ['getOnline', 'getWebSocket']),
-      ...mapActions('websocket', ['initWebSocket']),
-      ...mapMutations('websocket', ['setPassword']),
-      onClickClose() { //关闭
-        window.opener=null;
-        window.open('','_self');
-        window.close();
-      },
-      onClickLogin() {
-        if(this.password == '')  return;
-        this.valid = false;
-        if(!this.$refs.form.validate()) return;
-        let passwdMd5 = md5(this.password); //md5加密
-        this.initWebSocket(passwdMd5);
-        this.loading = true;
-        let i = 0;
-        let handler = setInterval(() => { //循环查看是否
-          i++;
-          if(this.getOnline() == true) {
-            this.loading = false;
-            this.password = '';
-            clearInterval(handler);
-          } else {
-            if (i > 5) {
-              clearInterval(handler); //停止循环
-              this.loading = false;
-              this.label = "can't connect server or password error";
-              this.$refs.form.reset();
-            }
-          }
-        }, 1000)
-      },      
-      onClickPassWord() {
-        this.label = 'password';
-      },
+export default {
+  data () {
+    return {
+      valid: true,
+      loading: false,
+      label: "password",
+      password: '',
+      passwdRules: [
+        v=> !! v || this.$t('password is required')
+      ]
     }
+  },
+  computed: {
+    ...mapState('websocket', ['dialog'])
+  },
+  methods: {
+    ...mapGetters('websocket', ['getOnline', 'getWebSocket']),
+    ...mapActions('websocket', ['initWebSocket']),
+    ...mapMutations('websocket', ['setPassword']),
+    onClickClose() { //关闭
+      window.opener=null;
+      window.open('','_self');
+      window.close();
+    },
+    onClickLogin() {
+      if(this.password == '')  return;
+      this.valid = false;
+      if(!this.$refs.form.validate()) return;
+      let passwdMd5 = md5(this.password); //md5加密
+      this.initWebSocket(passwdMd5);
+      this.loading = true;
+      let i = 0;
+      let handler = setInterval(() => { //循环查看是否
+        i++;
+        if(this.getOnline() == true) {
+          this.loading = false;
+          this.password = '';
+          clearInterval(handler);
+        } else {
+          if (i > 5) {
+            clearInterval(handler); //停止循环
+            this.loading = false;
+            this.label = "can't connect server or password error";
+            this.$refs.form.reset();
+          }
+        }
+      }, 1000)
+    },      
+    onClickPassWord() {
+      this.label = 'password';
+    },
   }
+}
 </script>

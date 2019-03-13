@@ -16,5 +16,16 @@
   "close": "Close",
   "templ": "Temperature",
   "no devices": "No Devices",
-  "add_room": "Add Room"
+  "add_room": "Add Room",
+  "password is required": "Password is required",
+  "please input password to login": "Please input password to login",
+  "can't connect server or password error": "Can't connect server or password error",
+  "dev-detail": "Dev Detail",
+  "modify name": "Modify name",
+  "name": "name",
+  "please input a new name": "Please input a new name",
+  "cancel": "Cancel",
+  "done": "Done",
+  "name is required": "Name is required",
+  "name must be less than 10 characters": "Name must be less than 10 characters"
 }

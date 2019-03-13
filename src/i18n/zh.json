@@ -20,5 +20,12 @@
   "password is required": "密码不能为空",
   "please input password to login": "请输入密码登录",
   "can't connect server or password error": "无法连接服务器或密码错误",
-  "dev-detail": "设备详情"
+  "dev-detail": "设备详情",
+  "modify name": "修改名字",
+  "name": "名字",
+  "please input a new name": "请输入一个新的名字",
+  "cancel": "取消",
+  "done": "确定",
+  "name is required": "名字不能为空",
+  "name must be less than 10 characters": "名字必须少于10个字符"
 }

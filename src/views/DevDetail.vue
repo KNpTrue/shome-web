@@ -29,6 +29,7 @@
                 flat
                 icon
                 style="margin-bottom: 15px"
+                @click="onClickModName"
               >
                 <v-icon size="16" >mdi-pencil</v-icon>
               </v-btn>
@@ -109,15 +110,25 @@
           </div>
         </material-card>
       </v-flex>
+      <dialog-setname 
+        :dialog="dialog"
+        @toCloseDialog="closeModNameDialog"
+        @toModName="modName"
+        :srcName="dev.name"
+      >
+      </dialog-setname>
     </v-layout>
   </v-container>
+  
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import {devIconColorList} from '@/utils/dev'
 import KEY from '@/utils/key-enum'
 import keyMethods from '@/utils/key-method'
+import webMethods from '@/utils/web-method'
+import WEB from '@/utils/web-enum'
 
 export default {
   data: () => ({
@@ -125,7 +136,8 @@ export default {
     values: [
 
     ],
-    keytype: KEY.type //引用变量KEY.type
+    keytype: KEY.type, //引用变量KEY.type
+    dialog: false,
   }),
   computed: {
     ...mapState(['devlist']),
@@ -135,10 +147,12 @@ export default {
   },
   methods: {
     ...mapActions('websocket', ['changeKeyValue']),
+    ...mapMutations('websocket', ['sendToServer']),
     getColor () {
       return devIconColorList.find(item => item.type == this.dev.type).color;
     },
     isShowControl (key, controller) {
+      if(key.mode == KEY.mode.readonly) return false;
       switch(key.type) {
       case KEY.type.range: return controller == 'slider';
       case KEY.type.bool: return controller == 'switch';
@@ -163,6 +177,20 @@ export default {
     },
     isDevOpen: keyMethods.isDevOpen,
     isDevHaveSwitch: keyMethods.isDevHaveSwitch,
+    closeModNameDialog () {
+      this.dialog = false;
+    },
+    onClickModName () {
+      this.dialog = true;
+    },
+    modName (name) {
+      this.dialog = false;
+      this.sendToServer(webMethods.packageMsg(WEB.method.set, WEB.type.dev, {
+        id: this.dev.id,
+        who: 'name',
+        what: name
+    }));
+    }
   }
 }
 </script>

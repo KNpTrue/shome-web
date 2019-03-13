@@ -5,7 +5,7 @@
         <router-view></router-view>
       </v-fade-transition>
     </div>
-    <core-login></core-login>
+    <dialog-login></dialog-login>
     <core-footer></core-footer>
   </v-content>
 </template>
