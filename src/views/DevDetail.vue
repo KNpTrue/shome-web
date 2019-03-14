@@ -8,7 +8,7 @@
     <v-layout
       wrap
     >
-    <v-flex
+      <v-flex
         md12
         xs12
         style="padding-top: 0px; padding-bottom: 0px"
@@ -42,11 +42,16 @@
               >
                 <v-icon size="32">mdi-power</v-icon>
               </v-btn>
+              <p
+                class="category font-weight-thin"
+                style="float: right;margin-top: 32px"
+                v-text="getOpenState()"
+              />
             </div>
             <p
               class="category font-weight-thin"
               style="margin-top: 15px"
-              v-text="text"
+              v-text="getNameById(roomlist, dev.roomid)"
             />
           </div>
         </material-card>
@@ -82,39 +87,40 @@
                 style="margin-top:-5px"
                 thumb-label
                 color="white"
-                v-model="values[index]"
-                :max="getRange(key.value, 2)"
-                :min="getRange(key.value, 1)"
-                :step="1"
+                v-model="key.value"
+                :max="key.top"
+                :min="key.btn"
+                :step="key.step"
                 v-if="isShowControl(key, 'slider')"
-                @change="onClickChangeKey(key, values[index])"
+                @change="onClickChangeKey(key, key.value)"
               >
               </v-slider>
               <v-switch
                 color="white"
-                v-model="values[index]"
+                v-model="key.value"
                 style="float: right; margin-bottom: 0px; margin-top: 0px; padding-top: 25px"
                 v-if="isShowControl(key, 'switch')"
-                @change="onClickChangeKey(key, values[index])"
+                @change="onClickChangeKey(key, key.value)"
               >
               </v-switch>
               <v-text-field
-              style="float: right; padding: 0px; margin-top: -5px"
+              style="float: right; padding: 0px; margin-top: -7px"
                 class="notextdetails"
                 :type="key.type == keytype.number?'number':''"
-                v-model="values[index]"
+                v-model="key.value"
                 v-if="isShowControl(key, 'text')"
-                @change="onClickChangeKey(key, (key.type == keytype.number?parseFloat(values[index]):values[index]))"
+                @change="onClickChangeKey(key, (key.type == keytype.number?parseFloat(key.value):key.value))"
               >
               </v-text-field>
           </div>
         </material-card>
       </v-flex>
-      <dialog-setname 
+      <dialog-setname
         :dialog="dialog"
         @toCloseDialog="closeModNameDialog"
         @toModName="modName"
         :srcName="dev.name"
+        :title="$t('modify name')"
       >
       </dialog-setname>
     </v-layout>
@@ -129,18 +135,17 @@ import KEY from '@/utils/key-enum'
 import keyMethods from '@/utils/key-method'
 import webMethods from '@/utils/web-method'
 import WEB from '@/utils/web-enum'
+import common from '@/utils/common'
 
 export default {
   data: () => ({
     text: '占位',
-    values: [
-
-    ],
     keytype: KEY.type, //引用变量KEY.type
+    values: [],
     dialog: false,
   }),
   computed: {
-    ...mapState(['devlist']),
+    ...mapState(['devlist', 'roomlist']),
     dev () {
       return this.devlist.find(item => item.id == this.$route.query.devId);
     }
@@ -163,9 +168,6 @@ export default {
     isShowKeyValue (key) {
       return key.mode == KEY.mode.readonly;
     },
-    getRange (value, index) {
-      return parseInt(value.split('/')[index]);
-    },
     onClickChangeKey (key, value) {
       this.changeKeyValue({dev: this.dev, keyname: key.name, value: value});
     },
@@ -175,8 +177,7 @@ export default {
     onClickChangeBool(keyname) {
       this.changeKeyValue({dev: this.dev, keyname: keyname, value: !keyMethods.getKey(this.dev.keylist, keyname).value});
     },
-    isDevOpen: keyMethods.isDevOpen,
-    isDevHaveSwitch: keyMethods.isDevHaveSwitch,
+
     closeModNameDialog () {
       this.dialog = false;
     },
@@ -189,8 +190,15 @@ export default {
         id: this.dev.id,
         who: 'name',
         what: name
-    }));
-    }
+      }));
+    },
+    getOpenState() {
+      if(!keyMethods.isDevHaveSwitch(this.dev.keylist))  return '';
+      return this.$t(keyMethods.getKeyValue(this.dev.keylist.find(item => item.name == 'isOpen')));
+    },
+    isDevOpen: keyMethods.isDevOpen,
+    isDevHaveSwitch: keyMethods.isDevHaveSwitch,
+    getNameById: common.getNameById
   }
 }
 </script>
@@ -202,8 +210,8 @@ export default {
     }
   }
   .textlargebottom {
-    margin-top: 25px; 
-    font-size: 1.4rem
+    margin-top: 30px; 
+    font-size: 1.2rem
   }
   .v-input--switch__thumb.theme--dark {
     color:hsla(0, 0%, 100%, 0.21);

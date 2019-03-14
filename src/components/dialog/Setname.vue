@@ -1,8 +1,7 @@
 ﻿<template>
-  <v-layout row justify-center v-if="dialog">
     <v-dialog v-model="dialog" persistent max-width="350">
       <v-card>
-        <v-card-title class="headline">{{ $t('modify name') }}</v-card-title>
+        <v-card-title class="headline">{{ title }}</v-card-title>
         <v-card-text>
           <v-form
             ref="form"
@@ -38,7 +37,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-layout>
 </template>
 
 <script>
@@ -47,14 +45,16 @@
 export default {
   inheritAttrs: false,
 
-  data: () => ({
-    valid: true,
-    name: '',
-    nameRules: [
-      v=> !! v || this.$t('name is required'),
-      v => (v && v.length <= 10) || this.$t('name must be less than 10 characters')
-    ]
-  }),
+  data () {
+    return {
+      valid: true,
+      name: '',
+      nameRules: [
+        v=> !! v || this.$t('name is required'),
+        v => (v && v.length <= 10) || this.$t('name must be less than 10 characters')
+      ],
+    } 
+  },
   props: {
     dialog: {
       type: Boolean,
@@ -63,16 +63,25 @@ export default {
     srcName: {
       type: String,
       default: ''
+    },
+    title: {
+      type: String,
+      default: ''
     }
   },
-  created () {
-    this.name = this.srcName;
+  watch: {
+    dialog (val) {
+      if(!val)  return;
+      this.name = this.srcName;
+    }
   },
   methods: {
     onClickCancel () {
       this.$emit('toCloseDialog');
     },
     onClickMod () {
+      this.valid = false;
+      if(!this.$refs.form.validate()) return;
       this.$emit('toModName', this.name);
     }
   }

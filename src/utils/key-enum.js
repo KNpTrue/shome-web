@@ -4,10 +4,9 @@
 export default {
   type: {
     number: 0,
-    double: 1,
-    string: 2,
-    bool:   3,
-    range:  4
+    string: 1,
+    bool:   2,
+    range:  3
   },
   mode: {
     readonly: 0,

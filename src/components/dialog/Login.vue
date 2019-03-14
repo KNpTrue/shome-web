@@ -1,5 +1,4 @@
 ﻿<template>
-  <v-layout row justify-center v-if="dialog">
     <v-dialog v-model="dialog" persistent max-width="350">
       <v-card>
         <v-card-title class="headline">{{ $t('login') }} Shome</v-card-title>
@@ -46,7 +45,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-layout>
 </template>
 
 

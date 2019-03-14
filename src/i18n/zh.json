@@ -27,5 +27,6 @@
   "cancel": "取消",
   "done": "确定",
   "name is required": "名字不能为空",
-  "name must be less than 10 characters": "名字必须少于10个字符"
+  "name must be less than 10 characters": "名字必须少于10个字符",
+  "add dev": "添加设备"
 }

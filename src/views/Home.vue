@@ -20,14 +20,14 @@
         <material-stats-card
           :color="getIconColorItem(dev.type).color"
           :icon="getIconColorItem(dev.type).icon"
-          :title="dev.room"
+          :title="getNameById(roomlist, dev.roomid)"
           :value="dev.name"
           sub-icon="mdi-circle"
           :sub-icon-color="dev.online ? 'yellow' : ''"
           :sub-text="dev.online ? devMsg(dev) : '未在线'"
         >
           <v-btn flat 
-            icon 
+            icon
             v-if="isDevHaveSwitch(dev.keylist)"
             @click="changeKeyValue({dev: dev, keyname: 'isOpen', value: !isDevOpen(dev.keylist)})"
           >
@@ -52,12 +52,13 @@ import {devIconColorList} from '@/utils/dev'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import WEB from '@/utils/web-enum'
 import webMethod from '@/utils/web-method'
+import common from '@/utils/common'
 
 export default {
   data: () => ({
   }),
   computed: {
-    ...mapState(['devlist', 'selroom']),
+    ...mapState(['devlist', 'selroom', 'roomlist']),
 
   },
   methods: {
@@ -81,11 +82,13 @@ export default {
     getIconColorItem (type) {
       return devIconColorList.find(item => item.type == type);
     },
-    isDevOpen: keyMethods.isDevOpen,
-    isDevHaveSwitch: keyMethods.isDevHaveSwitch,
+    
     onclickDetail(dev) {
       this.$router.push({path: '/dev-detail', query: {devId: dev.id}});
-    }
+    },
+    isDevOpen: keyMethods.isDevOpen,
+    isDevHaveSwitch: keyMethods.isDevHaveSwitch,
+    getNameById: common.getNameById
   }
 }
 </script>

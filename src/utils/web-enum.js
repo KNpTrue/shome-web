@@ -6,5 +6,6 @@
   type: {
     all: 0,
     dev: 1,
+    room: 2,
   }
 }
