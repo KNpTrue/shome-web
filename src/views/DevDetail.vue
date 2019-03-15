@@ -51,7 +51,7 @@
             <p
               class="category font-weight-thin"
               style="margin-top: 15px"
-              v-text="getNameById(roomlist, dev.roomid)"
+              v-text="getRoomNameById(roomlist, dev.roomid, $t('no room set up'))"
             />
           </div>
         </material-card>
@@ -77,7 +77,7 @@
               <span class="title font-weight-light mb-2" v-text="key.name"></span>
               <span
                 class="font-weight-thin textlargebottom"
-                style="float: right"
+                style="float: right; width: 100%"
                 v-text="getKeyValue(key) + key.unit"
                 v-if="isShowKeyValue(key)"
               >
@@ -104,7 +104,7 @@
               >
               </v-switch>
               <v-text-field
-              style="float: right; padding: 0px; margin-top: -7px"
+              style="float: right; padding: 0px; margin-top: -10px; width: 100%"
                 class="notextdetails"
                 :type="key.type == keytype.number?'number':''"
                 v-model="key.value"
@@ -130,7 +130,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
-import {devIconColorList} from '@/utils/dev'
+import { getIconColorItem } from '@/utils/dev'
 import KEY from '@/utils/key-enum'
 import keyMethods from '@/utils/key-method'
 import webMethods from '@/utils/web-method'
@@ -154,7 +154,7 @@ export default {
     ...mapActions('websocket', ['changeKeyValue']),
     ...mapMutations('websocket', ['sendToServer']),
     getColor () {
-      return devIconColorList.find(item => item.type == this.dev.type).color;
+      return getIconColorItem(this.dev.type).color;
     },
     isShowControl (key, controller) {
       if(key.mode == KEY.mode.readonly) return false;
@@ -198,7 +198,7 @@ export default {
     },
     isDevOpen: keyMethods.isDevOpen,
     isDevHaveSwitch: keyMethods.isDevHaveSwitch,
-    getNameById: common.getNameById
+    getRoomNameById: common.getRoomNameById
   }
 }
 </script>
@@ -210,7 +210,8 @@ export default {
     }
   }
   .textlargebottom {
-    margin-top: 30px; 
+    //margin-top: 30px;
+    text-align: right;
     font-size: 1.2rem
   }
   .v-input--switch__thumb.theme--dark {

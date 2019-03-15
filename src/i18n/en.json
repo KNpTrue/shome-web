@@ -28,5 +28,9 @@
   "done": "Done",
   "name is required": "Name is required",
   "name must be less than 10 characters": "Name must be less than 10 characters",
-  "add dev": "Add Dev"
+  "add dev": "Add Dev",
+  "dev": "Dev",
+  "type": "Type",
+  "delete": "Delete",
+  "no room set up": "No room set up"
 }

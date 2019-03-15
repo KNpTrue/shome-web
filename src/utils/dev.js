@@ -6,7 +6,11 @@ const devIconColorList = [ //根据类型来确定icon
   {type: DEV.templ, icon: 'mdi-thermometer', color: 'info'},
   {type: DEV.camera, icon: 'mdi-camera', color: 'purple'},
 ];
+
+const getIconColorItem = (type) => {
+  return devIconColorList.find(item => item.type == type);
+};
 export {
-  devIconColorList,
+  getIconColorItem,
   DEV,
 }

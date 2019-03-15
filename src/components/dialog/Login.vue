@@ -16,6 +16,7 @@
               required
               :rules="passwdRules"
               @click="onClickPassWord"
+              autofocus
             >
               <template v-slot:prepend>
                 <v-tooltip
@@ -99,10 +100,11 @@ export default {
           }
         }
       }, 1000)
-    },      
+    },
     onClickPassWord() {
       this.label = 'password';
     },
-  }
+  },
+
 }
 </script>

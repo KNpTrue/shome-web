@@ -28,5 +28,9 @@
   "done": "确定",
   "name is required": "名字不能为空",
   "name must be less than 10 characters": "名字必须少于10个字符",
-  "add dev": "添加设备"
+  "add dev": "添加设备",
+  "dev": "设备",
+  "type": "类型",
+  "delete": "删除",
+  "no room set up": "没有设置房间"
 }

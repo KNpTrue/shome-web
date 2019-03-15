@@ -16,6 +16,7 @@
               :counter="10"
               required
               :rules="nameRules"
+              autofocus
             >
               <template v-slot:prepend>
                 <v-tooltip
@@ -83,6 +84,7 @@ export default {
       this.valid = false;
       if(!this.$refs.form.validate()) return;
       this.$emit('toModName', this.name);
+      this.$refs.form.reset();
     }
   }
 }

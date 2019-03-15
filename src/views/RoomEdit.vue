@@ -12,14 +12,14 @@
         v-for="(room, i) in roomlist"
         v-if="!(room.name == 'all')"
         :key="i"
-        sm12
+        sm6
         xs12
         md6
         lg4
         style="padding-top: 0px; padding-bottom: 0px"
       >
         <material-card
-          color="success"
+          :color="color"
           style="margin-bottom:0px; padding-bottom:0px"
         >
           <div slot="header">
@@ -35,24 +35,49 @@
               >
                 <v-icon size="16" >mdi-pencil</v-icon>
               </v-btn>
-              <v-btn
-                flat
+              <v-btn 
+                dark 
                 icon
+                flat
                 style="float: right"
-                @click="addDev"
+                @click="delRoom(room, i)"
               >
-                <v-icon size="24">mdi-plus</v-icon>
+                <v-icon>mdi-close</v-icon>
               </v-btn>
-              <p
-              class="category font-weight-thin"
-              style="float: right;margin-top: 21px"
-              v-text="$t('add dev')"
-              />
+              <v-menu
+                style="float:right"
+                bottom
+                left
+                content-class="dropdown-menu"
+                offset-y
+                transition="slide-y-transition">
+                <v-btn
+                  flat
+                  icon
+                  slot="activator"
+                >
+                  <v-icon size="24">mdi-plus</v-icon>
+                </v-btn>
+                <v-card>
+                  <v-list dense>
+                    <v-list-tile
+                      v-for="dev in getNoSetterDev()"
+                      :key="dev.id"
+                      @click="addDev(room, dev.id)"
+                      :disabled="dev.name == 'no devices'"
+                    >
+                      <v-list-tile-title
+                        v-text="dev.name == 'no devices' ? $t(dev.name) : dev.name"
+                      />
+                    </v-list-tile>
+                  </v-list>
+                </v-card>
+              </v-menu>
             </div>
           </div>
           <v-data-table
             :headers="headers"
-            :items="items"
+            :items="getDevListByRoomId(room.id)"
             hide-actions
           >
             <template
@@ -61,7 +86,7 @@
             >
               <span
                 class="subheading font-weight-light text-success text--darken-3"
-                v-text="header.text"
+                v-text="$t(header.text)"
               />
             </template>
             <template
@@ -69,9 +94,21 @@
               slot-scope="{ item }"
             >
               <td>{{ item.name }}</td>
-              <td>{{ item.country }}</td>
-              <td>{{ item.city }}</td>
-              <td class="text-xs-right">{{ item.salary }}</td>
+              <td>
+                <v-icon>
+                  {{ getIconColorItem(item.type).icon }}
+                </v-icon>
+              </td>
+              <td>
+                <v-btn 
+                  icon 
+                  flat 
+                  style="float: right; margin:0px"
+                  @click="delDev(room, item.id)"
+                >
+                  <v-icon color="tertiary">mdi-delete-outline</v-icon>
+                </v-btn>
+              </td>
             </template>
           </v-data-table>
         </material-card>
@@ -92,6 +129,7 @@
 import { mapState, mapMutations } from 'vuex'
 import webMethods from '@/utils/web-method'
 import WEB from '@/utils/web-enum'
+import { getIconColorItem } from '@/utils/dev'
 
 export default {
   data () {
@@ -101,64 +139,26 @@ export default {
       headers: [
         {
           sortable: false,
-          text: 'Name',
+          text: 'dev',
           value: 'name'
+        },  
+        {
+          sortable: false,
+          text: 'type',
+          value: 'type',
         },
         {
           sortable: false,
-          text: 'Country',
-          value: 'country'
-        },
-        {
-          sortable: false,
-          text: 'City',
-          value: 'city'
-        },
-        {
-          sortable: false,
-          text: 'Salary',
-          value: 'salary',
+          text: 'delete',
+          value: 'delete', 
           align: 'right'
-        }
-      ],
-      items: [
-        {
-          name: 'Dakota Rice',
-          country: 'Niger',
-          city: 'Oud-Tunrhout',
-          salary: '$35,738'
         },
-        {
-          name: 'Minerva Hooper',
-          country: 'Curaçao',
-          city: 'Sinaai-Waas',
-          salary: '$23,738'
-        }, {
-          name: 'Sage Rodriguez',
-          country: 'Netherlands',
-          city: 'Overland Park',
-          salary: '$56,142'
-        }, {
-          name: 'Philip Chanley',
-          country: 'Korea, South',
-          city: 'Gloucester',
-          salary: '$38,735'
-        }, {
-          name: 'Doris Greene',
-          country: 'Malawi',
-          city: 'Feldkirchen in Kārnten',
-          salary: '$63,542'
-        }, {
-          name: 'Mason Porter',
-          country: 'Chile',
-          city: 'Gloucester',
-          salary: '$78,615'
-        }
-      ]
+      ],
+      items: []
     }
   },
   computed: {
-    ...mapState(['roomlist'])
+    ...mapState(['roomlist', 'devlist', 'color']),
   },
   methods: {
     ...mapMutations('websocket', ['sendToServer']),
@@ -177,7 +177,47 @@ export default {
         who: 'name',
         what: name
       }));
-    }
+    },
+    getDevListByRoomId (id) {
+      var array = [];
+      for (let i = 0, len = this.devlist.length; i < len; i++) {
+        if (this.devlist[i].roomid == id)
+          array.push(this.devlist[i]);
+      }
+      return array;
+    },
+    addDev (room, devid) {
+      this.sendToServer(webMethods.packageMsg(WEB.method.set, WEB.type.room, {
+        id: room.id,
+        who: 'adddev',
+        what: devid
+      }));
+    },
+    delDev(room, devid) {
+      this.sendToServer(webMethods.packageMsg(WEB.method.set, WEB.type.room, {
+        id: room.id,
+        who: 'deldev',
+        what: devid
+      }));
+    },
+    delRoom (room, i) {
+      this.sendToServer(webMethods.packageMsg(WEB.method.set, WEB.type.room, {
+        id: room.id,
+        who: 'del',
+        what: 0
+      }));
+    },
+    getNoSetterDev () {
+      var array = [];
+      for(var i = 0, len = this.devlist.length; i < len; i++) {
+        if(this.devlist[i].roomid == -1) {
+          array.push(this.devlist[i]);
+        }
+      }
+      if(array.length == 0) array.push({name:'no devices'});
+      return array;
+    },
+    getIconColorItem: getIconColorItem
   }
 }
 

@@ -10,7 +10,7 @@
     <v-layout wrap>
       <v-flex
         v-for="dev in devlist"
-        v-if="isRoomSel(dev.room)"
+        v-if="isRoomSel(getItemById(roomlist, dev.roomid))"
         :key="dev.id"
         sm6
         xs12
@@ -20,7 +20,7 @@
         <material-stats-card
           :color="getIconColorItem(dev.type).color"
           :icon="getIconColorItem(dev.type).icon"
-          :title="getNameById(roomlist, dev.roomid)"
+          :title="getRoomNameById(roomlist, dev.roomid, $t('no room set up'))"
           :value="dev.name"
           sub-icon="mdi-circle"
           :sub-icon-color="dev.online ? 'yellow' : ''"
@@ -48,7 +48,7 @@
 <script>
 import keyMethods from '@/utils/key-method'
 import KEY from '@/utils/key-enum'
-import {devIconColorList} from '@/utils/dev'
+import {getIconColorItem} from '@/utils/dev'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import WEB from '@/utils/web-enum'
 import webMethod from '@/utils/web-method'
@@ -76,19 +76,16 @@ export default {
       return msg;
     },
     isRoomSel (room) {
-      return this.selroom == 'all' ? true : (room == this.selroom);
-      //return true;
+      return this.selroom == 'all' ? true : (room == undefined ? false : room.name == this.selroom);
     },
-    getIconColorItem (type) {
-      return devIconColorList.find(item => item.type == type);
-    },
-    
     onclickDetail(dev) {
       this.$router.push({path: '/dev-detail', query: {devId: dev.id}});
     },
     isDevOpen: keyMethods.isDevOpen,
     isDevHaveSwitch: keyMethods.isDevHaveSwitch,
-    getNameById: common.getNameById
+    getRoomNameById: common.getRoomNameById,
+    getItemById: common.getItemById,
+    getIconColorItem: getIconColorItem
   }
 }
 </script>

@@ -3,6 +3,7 @@ import {set} from '@/utils/vuex'
 import WEB from '@/utils/web-enum'
 import webMethods from '@/utils/web-method'
 import keyMethods from '@/utils/key-method'
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 const state = {
   websocket: null,
@@ -51,7 +52,16 @@ const actions = {
           case 'dev': webMethods.updateList(rootState.devlist, obj.data);  break;
           case 'todo':  webMethods.updateList(rootState.todolist, obj.data); break;
           case 'set': webMethods.updateList(rootState.setlist, obj.data);  break;
-          case 'room':  webMethods.updateList(rootState.roomlist, obj.data); break;
+          case 'room':  
+            webMethods.updateList(rootState.roomlist, obj.data);
+            var devIdList = obj.data.devlist;
+            rootState.devlist.forEach(dev => {
+              if(dev.roomid == obj.data.id) dev.roomid = -1;
+              for(var i = 0, len = devIdList.length; i < len; i++) {
+                if(dev.id == devIdList[i])  dev.roomid = obj.data.id;
+              }
+            })
+            break;
           case 'all':
             rootState.devlist = obj.data.devlist;
             rootState.roomlist = obj.data.roomlist;
