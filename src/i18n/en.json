@@ -32,5 +32,7 @@
   "dev": "Dev",
   "type": "Type",
   "delete": "Delete",
-  "no room set up": "No room set up"
+  "no room set up": "No room set up",
+  "set router": "Set Router",
+  "add room": "Add Room"
 }

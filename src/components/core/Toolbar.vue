@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <v-toolbar
     id="core-toolbar"
     flat
@@ -43,8 +43,8 @@
         py-2
       >
         <v-fade-transition mode="out-in">
-          <toolbar-home v-if="routeName == 'home'" :textShow="responsive"></toolbar-home>
-          <toolbar-room-edit v-if="routeName == 'room-edit'" :textShow="responsive"></toolbar-room-edit>
+          <toolbar-home v-if="routeName === 'home'" :textShow="responsive"></toolbar-home>
+          <toolbar-room-edit v-if="routeName === 'room-edit'" :textShow="responsive"></toolbar-room-edit>
         </v-fade-transition>
       </v-flex>
     </v-toolbar-items>
@@ -59,47 +59,47 @@ import {
 export default {
   data: () => ({
     notifications: [
-      //通知
+      // 通知
     ],
     title: null,
     responsive: false,
     routeName: ''
   }),
   watch: {
-    $route(to) { //监听路由改变
-      this.title = this.$t(to.name);
-      this.routeName = to.name;
+    $route (to) { // 监听路由改变
+      this.title = this.$t(to.name)
+      this.routeName = to.name
     }
   },
   mounted () {
-    this.onResponsiveInverted();
-    window.addEventListener('resize', this.onResponsiveInverted);
+    this.onResponsiveInverted()
+    window.addEventListener('resize', this.onResponsiveInverted)
   },
   beforeDestroy () {
-    window.removeEventListener('resize', this.onResponsiveInverted);
+    window.removeEventListener('resize', this.onResponsiveInverted)
   },
   methods: {
     ...mapMutations(['setDrawer', 'toggleDrawer']),
     onClickDrawer () {
-      this.setDrawer(!this.$store.state.drawer);
+      this.setDrawer(!this.$store.state.drawer)
     },
     onClickBack () {
-      if (window.history.length <= 1) { //判断是否有上一条历史
-        this.$router.push({path:'/'});
+      if (window.history.length <= 1) { // 判断是否有上一条历史
+        this.$router.push({ path: '/' })
       } else {
-        this.$router.go(-1);
+        this.$router.go(-1)
       }
     },
-    onResponsiveInverted () { //响应式布局
+    onResponsiveInverted () { // 响应式布局
       if (window.innerWidth < 991) {
-        this.responsive = true;
+        this.responsive = true
       } else {
-        this.responsive = false;
+        this.responsive = false
       }
     },
-    isShowBackBtn(routeName) {
-        return ['room-edit', 'dev-detail'].find(item => item == routeName) != undefined
+    isShowBackBtn (routeName) {
+      return ['room-edit', 'dev-detail'].find(item => item === routeName) !== undefined
     }
   }
-};
+}
 </script>

@@ -32,5 +32,7 @@
   "dev": "设备",
   "type": "类型",
   "delete": "删除",
-  "no room set up": "没有设置房间"
+  "no room set up": "没有设置房间",
+  "set router": "路由器设置",
+  "add room": "添加房间"
 }

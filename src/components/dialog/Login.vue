@@ -1,4 +1,4 @@
-﻿<template>
+<template>
     <v-dialog v-model="dialog" persistent max-width="350">
       <v-card>
         <v-card-title class="headline">{{ $t('login') }} Shome</v-card-title>
@@ -48,7 +48,6 @@
     </v-dialog>
 </template>
 
-
 <script>
 import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
 import md5 from 'blueimp-md5'
@@ -58,10 +57,10 @@ export default {
     return {
       valid: true,
       loading: false,
-      label: "password",
+      label: 'password',
       password: '',
       passwdRules: [
-        v=> !! v || this.$t('password is required')
+        v => !!v || this.$t('password is required')
       ]
     }
   },
@@ -72,39 +71,39 @@ export default {
     ...mapGetters('websocket', ['getOnline', 'getWebSocket']),
     ...mapActions('websocket', ['initWebSocket']),
     ...mapMutations('websocket', ['setPassword']),
-    onClickClose() { //关闭
-      window.opener=null;
-      window.open('','_self');
-      window.close();
+    onClickClose () { // 关闭
+      window.opener = null
+      window.open('', '_self')
+      window.close()
     },
-    onClickLogin() {
-      if(this.password == '')  return;
-      this.valid = false;
-      if(!this.$refs.form.validate()) return;
-      let passwdMd5 = md5(this.password); //md5加密
-      this.initWebSocket(passwdMd5);
-      this.loading = true;
-      let i = 0;
-      let handler = setInterval(() => { //循环查看是否
-        i++;
-        if(this.getOnline() == true) {
-          this.loading = false;
-          this.password = '';
-          clearInterval(handler);
+    onClickLogin () {
+      if (this.password === '') return
+      this.valid = false
+      if (!this.$refs.form.validate()) return
+      let passwdMd5 = md5(this.password) // md5加密
+      this.initWebSocket(passwdMd5)
+      this.loading = true
+      let i = 0
+      let handler = setInterval(() => { // 循环查看是否
+        i++
+        if (this.getOnline() === true) {
+          this.loading = false
+          this.password = ''
+          clearInterval(handler)
         } else {
           if (i > 5) {
-            clearInterval(handler); //停止循环
-            this.loading = false;
-            this.label = "can't connect server or password error";
-            this.$refs.form.reset();
+            clearInterval(handler) // 停止循环
+            this.loading = false
+            this.label = "can't connect server or password error"
+            this.$refs.form.reset()
           }
         }
       }, 1000)
     },
-    onClickPassWord() {
-      this.label = 'password';
-    },
-  },
+    onClickPassWord () {
+      this.label = 'password'
+    }
+  }
 
 }
 </script>

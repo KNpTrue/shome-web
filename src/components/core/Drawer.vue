@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <v-navigation-drawer
     id="app-drawer"
     v-model="inputValue"
@@ -49,16 +49,15 @@
           />
         </v-list-tile>
         <v-list-tile
-          disabled
           active-class="primary"
           class="v-list-item v-list__tile--buy"
-          to="/"
+          href="/cgi-bin/luci"
         >
           <v-list-tile-action>
-            <v-icon>mdi-package-up</v-icon>
+            <v-icon>mdi-arrow-left</v-icon>
           </v-list-tile-action>
           <v-list-tile-title class="font-weight-light">
-            Go Back To Luci
+            {{ $t('set router') }}
           </v-list-tile-title>
         </v-list-tile>
       </v-layout>
@@ -75,7 +74,7 @@ import {
 
 export default {
   data: () => ({
-    logo: './img/vuetifylogo.png', //图标
+    logo: './img/vuetifylogo.png', // 图标
     links: [
       {
         to: '/home',
@@ -111,7 +110,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setDrawer', 'toggleDrawer']),
+    ...mapMutations(['setDrawer', 'toggleDrawer'])
   }
 }
 </script>

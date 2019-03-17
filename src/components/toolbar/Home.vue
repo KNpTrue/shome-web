@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <v-flex
     align-center
     layout
@@ -15,18 +15,18 @@
         slot="activator"
         class="toolbar-items"
       >
-          {{ transRoom(selroom) }}
+          {{ transRoomName(selroom) }}
           <v-icon color="tertiary">mdi-chevron-down</v-icon>
       </div>
       <v-card v-if="roomlist.length != 0">
         <v-list dense>
           <v-list-tile
             v-for="room in roomlist"
-            :key="room.name"
+            :key="room.id"
             @click="onClickSelRoom(room.name)"
           >
             <v-list-tile-title
-              v-text="transRoom(room.name)"
+              v-text="transRoomName(room.name)"
             />
           </v-list-tile>
         </v-list>
@@ -47,7 +47,7 @@
 <script>
 import {
   mapMutations,
-  mapState,
+  mapState
 } from 'vuex'
 
 export default {
@@ -58,17 +58,16 @@ export default {
     }
   },
   computed: {
-    ...mapState(['selroom', 'roomlist']),
+    ...mapState(['selroom', 'roomlist'])
   },
   methods: {
     ...mapMutations(['setSelRoom']),
-    onClickSelRoom (room) { //选择房间
-      this.setSelRoom(room);
+    onClickSelRoom (room) { // 选择房间
+      this.setSelRoom(room)
     },
-    transRoom(room) { //翻译房间名
-      return room == 'all' ? this.$t(room) : room;
-    },
+    transRoomName (room) { // 翻译房间名
+      return room === 'all' ? this.$t(room) : room
+    }
   }
 }
 </script>
-

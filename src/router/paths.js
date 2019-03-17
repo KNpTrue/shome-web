@@ -1,4 +1,4 @@
-﻿//path.js 放置路由的路径
+// path.js 放置路由的路径
 
 export default [
   {

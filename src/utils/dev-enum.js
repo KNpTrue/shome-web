@@ -1,4 +1,4 @@
-﻿/**
+/**
  * dev-type.js
  * dev的类型
  */
@@ -8,4 +8,4 @@ export default {
   light: 2,
   templ: 3,
   air_con: 4
-};
+}

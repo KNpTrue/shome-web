@@ -1,12 +1,12 @@
-﻿/**
+/**
  * key-types.h
  */
 export default {
   type: {
     number: 0,
     string: 1,
-    bool:   2,
-    range:  3
+    bool: 2,
+    range: 3
   },
   mode: {
     readonly: 0,

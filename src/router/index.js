@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 import paths from './paths'
 
-//从paths中获取routes的方法
+// 从paths中获取routes的方法
 function route (path, view, name) {
   return {
     name: name || view,
@@ -17,7 +17,6 @@ function route (path, view, name) {
 Vue.use(Router)
 
 const router = new Router({
-  mode: "history",
   routes: paths.map(path => route(path.path, path.view, path.name)).concat([
     { path: '*', redirect: '/home' }
   ]),
@@ -30,6 +29,6 @@ const router = new Router({
     }
     return { x: 0, y: 0 }
   }
-});
+})
 
-export default router;
+export default router

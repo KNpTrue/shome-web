@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <v-container
     fill-height
     fluid
@@ -21,7 +21,7 @@
           :no_card_text="true"
         >
           <div slot="header">
-            <div 
+            <div
               style="flex: 1 1 100%; height: 30px; margin-top: -15px"
             >
               <span class="title font-weight-light mb-2" v-text="dev.name"></span>
@@ -62,9 +62,8 @@
         md4
         lg3
         style="padding-top: 0px; padding-bottom: 0px; height: 101px"
-        v-for="(key, index) in dev.keylist"
+        v-for="key in filterOpenKey()"
         :key="key.name"
-        v-if="key.name !== 'isOpen'"
       >
         <material-card
           :color="getColor()"
@@ -125,7 +124,7 @@
       </dialog-setname>
     </v-layout>
   </v-container>
-  
+
 </template>
 
 <script>
@@ -140,61 +139,64 @@ import common from '@/utils/common'
 export default {
   data: () => ({
     text: '占位',
-    keytype: KEY.type, //引用变量KEY.type
+    keytype: KEY.type, // 引用变量KEY.type
     values: [],
-    dialog: false,
+    dialog: false
   }),
   computed: {
     ...mapState(['devlist', 'roomlist']),
     dev () {
-      return this.devlist.find(item => item.id == this.$route.query.devId);
+      return this.devlist.find(item => item.id === this.$route.query.devId)
     }
   },
   methods: {
     ...mapActions('websocket', ['changeKeyValue']),
     ...mapMutations('websocket', ['sendToServer']),
     getColor () {
-      return getIconColorItem(this.dev.type).color;
+      return getIconColorItem(this.dev.type).color
     },
     isShowControl (key, controller) {
-      if(key.mode == KEY.mode.readonly) return false;
-      switch(key.type) {
-      case KEY.type.range: return controller == 'slider';
-      case KEY.type.bool: return controller == 'switch';
-      case KEY.type.number: return controller == 'text';
-      case KEY.type.string: return controller == 'text';
+      if (key.mode === KEY.mode.readonly) return false
+      switch (key.type) {
+        case KEY.type.range: return controller === 'slider'
+        case KEY.type.bool: return controller === 'switch'
+        case KEY.type.number: return controller === 'text'
+        case KEY.type.string: return controller === 'text'
       }
     },
     isShowKeyValue (key) {
-      return key.mode == KEY.mode.readonly;
+      return key.mode === KEY.mode.readonly
     },
     onClickChangeKey (key, value) {
-      this.changeKeyValue({dev: this.dev, keyname: key.name, value: value});
+      this.changeKeyValue({ dev: this.dev, keyname: key.name, value: value })
     },
-    getKeyValue(key) {
-      return keyMethods.getKeyValue(key);
+    getKeyValue (key) {
+      return keyMethods.getKeyValue(key)
     },
-    onClickChangeBool(keyname) {
-      this.changeKeyValue({dev: this.dev, keyname: keyname, value: !keyMethods.getKey(this.dev.keylist, keyname).value});
+    onClickChangeBool (keyname) {
+      this.changeKeyValue({ dev: this.dev, keyname: keyname, value: !keyMethods.getKey(this.dev.keylist, keyname).value })
     },
 
     closeModNameDialog () {
-      this.dialog = false;
+      this.dialog = false
     },
     onClickModName () {
-      this.dialog = true;
+      this.dialog = true
     },
     modName (name) {
-      this.dialog = false;
+      this.dialog = false
       this.sendToServer(webMethods.packageMsg(WEB.method.set, WEB.type.dev, {
         id: this.dev.id,
         who: 'name',
         what: name
-      }));
+      }))
     },
-    getOpenState() {
-      if(!keyMethods.isDevHaveSwitch(this.dev.keylist))  return '';
-      return this.$t(keyMethods.getKeyValue(this.dev.keylist.find(item => item.name == 'isOpen')));
+    getOpenState () {
+      if (!keyMethods.isDevHaveSwitch(this.dev.keylist)) return ''
+      return this.$t(keyMethods.getKeyValue(this.dev.keylist.find(item => item.name === 'isOpen')))
+    },
+    filterOpenKey () {
+      return this.dev.keylist.filter(key => key.name !== 'isOpen')
     },
     isDevOpen: keyMethods.isDevOpen,
     isDevHaveSwitch: keyMethods.isDevHaveSwitch,
@@ -204,33 +206,36 @@ export default {
 </script>
 
 <style lang="scss">
-  .v-slider__thumb-label {
-    span {
-      color: black;
+  #core-view {
+    .v-slider__thumb-label {
+      span {
+        color: black;
+      }
     }
-  }
-  .textlargebottom {
-    //margin-top: 30px;
-    text-align: right;
-    font-size: 1.2rem
-  }
-  .v-input--switch__thumb.theme--dark {
-    color:hsla(0, 0%, 100%, 0.21);
-  }
+    .textlargebottom {
+      //margin-top: 30px;
+      text-align: right;
+      font-size: 1.2rem
+    }
+    .v-input--switch__thumb.theme--dark {
+      color:hsla(0, 0%, 100%, 0.21);
+    }
 
-  .notextdetails {
-    color: white!important;
-    caret-color: white!important;
-    .v-text-field__details {
-      display: none;
-    }
-    .v-input__slot {
-      margin-bottom: 0px
-    }
-    .v-text-field__slot {
-      input {
-        padding-bottom: 0px
+    .notextdetails {
+      color: white!important;
+      caret-color: white!important;
+      .v-text-field__details {
+        display: none;
+      }
+      .v-input__slot {
+        margin-bottom: 0px
+      }
+      .v-text-field__slot {
+        input {
+          padding-bottom: 0px
+        }
       }
     }
   }
+
 </style>

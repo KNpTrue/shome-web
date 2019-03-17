@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <v-content>
     <div id="core-view">
       <v-fade-transition mode="out-in">

@@ -87,7 +87,7 @@ export default {
       default: undefined
     },
     no_card_text: {
-      type: Boolean, 
+      type: Boolean,
       default: false
     }
   },

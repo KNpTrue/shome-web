@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <v-footer
     id="core-footer"
     absolute
