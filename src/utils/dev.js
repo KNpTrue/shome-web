@@ -7,7 +7,7 @@ const devIconColorList = [ // 根据类型来确定icon
   { type: DEV.camera, icon: 'mdi-camera', color: 'purple' }
 ]
 
-const getIconColorItem = (type) => {
+const getIconColorItem = (type) => { // 根据dev类型找到对应的color以及icon
   return devIconColorList.find(item => item.type === type)
 }
 export {
