@@ -3,6 +3,8 @@ import Router from 'vue-router'
 
 import paths from './paths'
 
+Vue.use(Router)
+
 // 从paths中获取routes的方法
 function route (path, view, name) {
   return {
@@ -13,8 +15,6 @@ function route (path, view, name) {
     ).then(resovle)
   }
 }
-
-Vue.use(Router)
 
 const router = new Router({
   routes: paths.map(path => route(path.path, path.view, path.name)).concat([

@@ -7,7 +7,13 @@ import KEY from './key-enum'
 const getKey = (keylist, name) => keylist.find(item => item.name === name)
 // 获取KeyValue
 const getKeyValue = function (key) {
-  if (key.type === KEY.type.bool) { return key.value ? 'open' : 'close' } else return key.value
+  if (key.type === KEY.type.bool) {
+    return key.value ? 'open' : 'close'
+  } else if (key.type === KEY.type.number) {
+    return Math.floor(key.value * 10) / 10
+  } else {
+    return key.value
+  }
 }
 // 设备是否打开
 const isDevOpen = keylist => getKey(keylist, 'isOpen').value

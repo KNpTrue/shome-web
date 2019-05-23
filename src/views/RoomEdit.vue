@@ -63,10 +63,10 @@
                       v-for="dev in getNoSetterDev()"
                       :key="dev.id"
                       @click="addDev(room, dev.id)"
-                      :disabled="dev.name == 'no devices'"
+                      :disabled="dev.name === 'no devices'"
                     >
                       <v-list-tile-title
-                        v-text="dev.name == 'no devices' ? $t(dev.name) : dev.name"
+                        v-text="dev.name === 'no devices' ? $t(dev.name) : dev.name"
                       />
                     </v-list-tile>
                   </v-list>
@@ -164,9 +164,6 @@ export default {
   },
   methods: {
     ...mapMutations('websocket', ['sendToServer']),
-    closeModNameDialog () {
-      this.dialog = false
-    },
     onClickModName (room) {
       this.dialog = true
       this.editRoom = room

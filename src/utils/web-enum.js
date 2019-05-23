@@ -6,6 +6,8 @@ export default {
   type: {
     all: 0,
     dev: 1,
-    room: 2
+    room: 2,
+    todo: 3,
+    set: 4
   }
 }

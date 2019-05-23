@@ -34,5 +34,22 @@
   "delete": "Delete",
   "no room set up": "No room set up",
   "set router": "Set Router",
-  "add room": "Add Room"
+  "add room": "Add Room",
+  "language": "Language",
+  "select display language": "Select display language",
+  "zh": "Chinese",
+  "en": "English",
+  "todo": "To-do",
+  "set": "Set",
+  "add todo": "Add to-do",
+  "add set": "Add Set",
+  "task": "Task",
+  "modify": "Modify",
+  "offline": "Offline",
+  "room": "Room",
+  "next": "Next",
+  "back": "Back",
+  "attributes": "Attributes",
+  "select device": "Select device",
+  "select attributes to change": "Select attributes to change"
 }

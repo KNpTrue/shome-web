@@ -23,7 +23,7 @@
           :value="dev.name"
           sub-icon="mdi-circle"
           :sub-icon-color="dev.online ? 'yellow' : ''"
-          :sub-text="dev.online ? devMsg(dev) : '未在线'"
+          :sub-text="dev.online ? devMsg(dev) : $t('offline')"
         >
           <v-btn flat
             icon
@@ -34,6 +34,7 @@
           </v-btn>
           <v-btn flat
             icon
+            v-if="dev.online"
             @click="onclickDetail(dev)"
           >
               <v-icon style="margin-top:2px">mdi-menu</v-icon>

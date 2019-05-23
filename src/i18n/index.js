@@ -9,9 +9,18 @@ const messages = {
 }
 
 const i18n = new VueI18n({
-  locale: 'zh',
   fallbackLocale: 'en',
   messages
 })
+
+// 从localStorage读取语言
+if (window.localStorage) {
+  if (localStorage.language === undefined) {
+    localStorage.language = i18n.fallbackLocale
+  }
+  i18n.locale = localStorage.language
+} else {
+  i18n.locale = i18n.fallbackLocale
+}
 
 export default i18n

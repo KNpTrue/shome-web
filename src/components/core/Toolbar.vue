@@ -31,7 +31,7 @@
             <v-icon>mdi-view-list</v-icon>
           </v-btn>
         </v-fab-transition>
-        {{ title }}
+        {{ $t(title) }}
       </v-toolbar-title>
     </div>
 
@@ -45,6 +45,7 @@
         <v-fade-transition mode="out-in">
           <toolbar-home v-if="routeName === 'home'" :textShow="responsive"></toolbar-home>
           <toolbar-room-edit v-if="routeName === 'room-edit'" :textShow="responsive"></toolbar-room-edit>
+          <toolbar-scene v-if="routeName === 'scene'" :textShow="responsive"></toolbar-scene>
         </v-fade-transition>
       </v-flex>
     </v-toolbar-items>
@@ -67,7 +68,7 @@ export default {
   }),
   watch: {
     $route (to) { // 监听路由改变
-      this.title = this.$t(to.name)
+      this.title = to.name
       this.routeName = to.name
     }
   },

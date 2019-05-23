@@ -18,5 +18,6 @@ export default {
     { id: 4, name: '饭厅', devlist: ['axsewnfis'] }
   ],
   selroom: 'all', // 被选中的房间
-  devid: '' // 设备详情的id
+  devid: '', // 设备详情的id
+  selScene: 'todo' // 场景
 }

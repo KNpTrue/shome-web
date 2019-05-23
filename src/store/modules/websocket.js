@@ -29,7 +29,9 @@ const mutations = {
 const actions = {
   initWebSocket ({ commit, dispatch, rootState }, passwd) {
     // 创建websocket连接
-    commit('setWebSocket', new WebSocket('ws://' + config.websocket.ip + config.websocket.port, passwd))
+    commit('setWebSocket', new WebSocket(
+      'ws://' + config.websocket.ip + ':' + config.websocket.port, passwd
+    ))
     state.websocket.onopen = function () { // 在打开时
       state.online = true
       state.dialog = false
@@ -43,7 +45,7 @@ const actions = {
       state.count++
       state.online = false
       // 如果有密码 重连
-      if (state.count < 10 && state.password !== '') { 
+      if (state.count < 10 && state.password !== '') {
         dispatch('initWebSocket', state.password)
       } else {
         state.password = ''
@@ -67,9 +69,12 @@ const actions = {
           })
           break
         case 'all':
+          console.log(obj.data)
           rootState.devlist = obj.data.devlist
           rootState.roomlist = obj.data.roomlist
           rootState.roomlist.unshift({ id: -1, name: 'all' })
+          rootState.setlist = obj.data.setlist
+          rootState.todolist = obj.data.todolist
           break
       }
     }

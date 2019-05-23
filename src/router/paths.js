@@ -2,9 +2,9 @@
 
 export default [
   {
-    path: '/home',
-    name: 'home',
-    view: 'Home'
+    path: '/home', // 路由路径
+    name: 'home', // 路由名称
+    view: 'Home' // 路由跳转的View组件
   },
   {
     path: '/scene',

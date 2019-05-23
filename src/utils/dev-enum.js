@@ -7,5 +7,7 @@ export default {
   camera: 1,
   light: 2,
   templ: 3,
-  air_con: 4
+  air_con: 4,
+  environ_sensor: 5,
+  human_sensor: 6
 }
