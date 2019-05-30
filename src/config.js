@@ -3,8 +3,8 @@
  */
 export default {
   websocket: {
-    ip: window.location.host.split(':', 1)[0],
-    // ip: '192.168.1.103',
+    // ip: window.location.host.split(':', 1)[0],
+    ip: '192.168.1.102',
     port: '8001'
   }
 }

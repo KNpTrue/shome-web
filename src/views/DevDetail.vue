@@ -137,12 +137,14 @@ import WEB from '@/utils/web-enum'
 import common from '@/utils/common'
 
 export default {
-  data: () => ({
-    text: '占位',
-    keytype: KEY.type, // 引用变量KEY.type
-    values: [],
-    dialog: false
-  }),
+  data () {
+    return {
+      text: '占位',
+      keytype: KEY.type, // 引用变量KEY.type
+      values: [],
+      dialog: false
+    }
+  },
   computed: {
     ...mapState(['devlist', 'roomlist']),
     dev () {
@@ -156,7 +158,7 @@ export default {
       return getIconColorItem(this.dev.type).color
     },
     isShowControl (key, controller) {
-      if (key.mode === KEY.mode.readonly) return false
+      if (key && key.mode === KEY.mode.readonly) return false
       switch (key.type) {
         case KEY.type.range: return controller === 'slider'
         case KEY.type.bool: return controller === 'switch'

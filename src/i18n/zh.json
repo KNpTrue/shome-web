@@ -51,5 +51,8 @@
   "back": "上一步",
   "attributes": "属性",
   "select device": "选择设备",
-  "select attributes to change": "选择要改变的属性"
+  "select attributes to change": "选择要改变的属性",
+  "value": "值",
+  "addtask": "添加任务",
+  "modtask": "修改任务"
 }

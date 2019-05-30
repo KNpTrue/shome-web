@@ -7,22 +7,38 @@
             <v-window-item :value="1">
               <v-select
                 v-model="seldev"
-                :items="devlist"
-                item-text="name"
+                :items="filterNoOnlineDev()"
+                item-value="id"
                 :label="$t('dev')"
                 return-object
                 required
-              ></v-select>
+                no-data-text="no device"
+              >
+              <template slot="selection" slot-scope="data">
+                {{ data.item.name }}({{ getRoomNameById(roomlist, data.item.roomid, $t('no room set up')) }})
+              </template>
+              <template slot='item' slot-scope="data">
+                {{ data.item.name }}({{ getRoomNameById(roomlist, data.item.roomid, $t('no room set up')) }})
+              </template>
+              </v-select>
             </v-window-item>
             <v-window-item :value="2">
               <v-select
                 v-model="selkey"
-                :items="seldev.keylist"
+                :items="filterReadOnlyKey(seldev.keylist)"
                 item-text="name"
+                item-value="name"
                 :label="$t('attributes')"
                 return-object
                 required
+                no-data-text="no key"
               ></v-select>
+              <helper-keyedit
+                :srckey="selkey"
+                :value="keyvalue"
+                @toChangeVal="toChangeVal"
+              >
+              </helper-keyedit>
             </v-window-item>
           </v-window>
         </v-card-text>
@@ -38,6 +54,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import KEY from '@/utils/key-enum'
+import common from '@/utils/common'
 
 export default {
   inheritAttrs: false,
@@ -50,14 +68,15 @@ export default {
         'select device',
         'select attributes to change'
       ],
-      task: {},
       valid: true,
+      task: {},
       seldev: {},
-      selkey: {}
+      selkey: {},
+      keyvalue: undefined
     }
   },
   computed: {
-    ...mapState(['devlist', 'color'])
+    ...mapState(['devlist', 'color', 'roomlist'])
   },
   props: {
     dialog: {
@@ -77,6 +96,12 @@ export default {
     dialog (val) {
       if (!val) return
       this.task = this.srcTask
+      
+      if (this.dialog) {
+        this.seldev = this.getItemById(this.devlist, this.srcTask.devid)
+        this.selkey = this.srcTask.key
+        this.keyvalue = this.selkey.value
+      }
     }
   },
   methods: {
@@ -89,15 +114,29 @@ export default {
     },
     onClickMod () {
       if(this.step === this.maxstep) {
-        console.log(this.seldev)
-        this.valid = false
-        if (!this.$refs.form.validate()) return
-        this.$emit('toModTask', this.task)
-        this.$refs.form.reset()
+        var key = {
+          name: this.selkey.name,
+          type: this.selkey.type,
+          value: this.keyvalue
+        }
+        this.$emit('toSetTask', this.seldev.id, key)
+        this.step = 1
       } else {
         this.step++
       }
-    }
+    },
+    filterNoOnlineDev () {
+      return this.devlist.filter(dev => dev.online === true)
+    },
+    filterReadOnlyKey (keylist) {
+      if (keylist === undefined)  return []
+      return keylist.filter(key => key.mode === KEY.mode.readwrite)
+    },
+    toChangeVal (val) {
+      this.keyvalue = val
+    },
+    getRoomNameById: common.getRoomNameById,
+    getItemById: common.getItemById
   }
 }
 </script>

@@ -49,35 +49,14 @@
                 >
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <v-menu
+                <v-btn
+                  flat
+                  icon
                   style="float:right"
-                  bottom
-                  left
-                  content-class="dropdown-menu"
-                  offset-y
-                  transition="slide-y-transition">
-                  <v-btn
-                    flat
-                    icon
-                    slot="activator"
-                  >
-                    <v-icon size="24">mdi-plus</v-icon>
-                  </v-btn>
-                  <v-card>
-                    <v-list dense>
-                      <v-list-tile
-                        v-for="dev in devlist"
-                        :key="dev.id"
-                        @click="addDev(set, dev.id)"
-                        :disabled="devlist.length === 0"
-                      >
-                        <v-list-tile-title
-                          v-text="dev.name + '(' + getRoomNameById(roomlist, dev.roomid, $t('no room set up')) + ')'"
-                        />
-                      </v-list-tile>
-                    </v-list>
-                  </v-card>
-                </v-menu>
+                  @click="addTask(set)"
+                >
+                  <v-icon size="24">mdi-plus</v-icon>
+                </v-btn>
               </div>
             </div>
             <v-data-table
@@ -110,7 +89,7 @@
                     icon
                     flat
                     style="float: right; margin:0px"
-                    @click.prevent="modTask(item)"
+                    @click.prevent="modTask(set, item)"
                   >
                     <v-icon color="tertiary">mdi-pencil-outline</v-icon>
                   </v-btn>
@@ -120,7 +99,7 @@
                     icon
                     flat
                     style="float: right; margin:0px"
-                    @click.prevent="delTask(item)"
+                    @click.prevent="delTask(set, item.idx)"
                   >
                     <v-icon color="tertiary">mdi-delete-outline</v-icon>
                   </v-btn>
@@ -144,14 +123,14 @@
       :title="$t('modify name')"
     >
     </dialog-setname>
-    <dialog-setTask
+    <dialog-settask
       :dialog="dialog_task"
       @toCloseDialog="dialog_task = false"
-      @toModTask="modTask"
+      @toSetTask="setTask"
       :srcTask="editTask"
       :title="$t(dialog_taskTitle)"
     >
-    </dialog-setTask>
+    </dialog-settask>
   </v-container>
 </template>
 
@@ -166,7 +145,7 @@ export default {
   data () {
     return {
       dialog_name: false,
-      dialog_task: true,
+      dialog_task: false,
       dialog_taskTitle: '',
       editObj: {},
       editTask: {},
@@ -223,19 +202,28 @@ export default {
         what: name
       }))
     },
-    modTask (task) {
+   setTask (devid, key) {
       this.dialog_task = false
-      this.sendToServer(webMethods.packageMsg(WEB.methods.set, WEB.type.set, {
+      console.log(this.editObj)
+      var idx
+      if (this.editTask === undefined) { //add
+        idx = -1
+      } else {
+        idx = this.editTask.idx
+      }
+      this.sendToServer(webMethods.packageMsg(WEB.method.set, WEB.type.set, {
         id: this.editObj.id,
-        who: 'modtask',
-        what: { id: this.editObj.tasklist.indexOf(task), task: task}
+        who: this.dialog_taskTitle,
+        what: { idx: idx, devid: devid, key: key }
       }))
+      this.editTask = {}
+      this.editObj = {}
     },
-    delTask (set, devid) {
+    delTask (set, taskid) {
       this.sendToServer(webMethods.packageMsg(WEB.method.set, WEB.type.set, {
         id: set.id,
         who: 'deltask',
-        what: devid
+        what: taskid
       }))
     },
     delSet (set) {
@@ -244,6 +232,18 @@ export default {
         who: 'del',
         what: 0
       }))
+    },
+    addTask (set) {
+      this.editObj = set
+      this.dialog_taskTitle = 'addtask'
+      this.editTask = {}
+      this.dialog_task = true
+    },
+    modTask (set, task) {
+      this.editObj = set
+      this.dialog_taskTitle = 'modtask'
+      this.editTask = task
+      this.dialog_task = true
     },
     getItemById: common.getItemById,
     getRoomNameById: common.getRoomNameById,

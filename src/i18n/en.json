@@ -51,5 +51,8 @@
   "back": "Back",
   "attributes": "Attributes",
   "select device": "Select device",
-  "select attributes to change": "Select attributes to change"
+  "select attributes to change": "Select attributes to change",
+  "value": "Value",
+  "addtask": "Add Task",
+  "modtask": "Modify Task"
 }
