@@ -69,7 +69,7 @@ const actions = {
           })
           break
         case 'all':
-          console.log(obj.data)
+          // console.log(obj.data)
           rootState.devlist = obj.data.devlist
           rootState.roomlist = obj.data.roomlist
           rootState.roomlist.unshift({ id: -1, name: 'all' })

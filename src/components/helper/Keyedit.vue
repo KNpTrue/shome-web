@@ -24,7 +24,7 @@
       required
       v-if="isShowControl(srckey, 'select')"
     >
-    </v-select> 
+    </v-select>
   </div>
 </template>
 
@@ -36,6 +36,7 @@ export default {
   data () {
     return {
       keytype: KEY.type,
+      value: undefined
     }
   },
   computed: {
@@ -44,18 +45,21 @@ export default {
   watch: {
     value (val) {
       this.$emit('toChangeVal', val)
+    },
+    srcvalue (val) {
+      this.value = this.srcvalue
     }
   },
   props: {
     srckey: {
       type: Object,
-      default: {}
+      default: undefined
     },
-    value: undefined
+    srcvalue: undefined
   },
   methods: {
     isShowControl (key, controller) {
-      if (key === undefined)  return false
+      if (key === undefined) return false
       if (key.mode === KEY.mode.readonly) return false
       switch (key.type) {
         case KEY.type.range: return controller === 'slider'
@@ -64,7 +68,7 @@ export default {
         case KEY.type.string: return controller === 'text'
         default: return false
       }
-    },
+    }
   }
 }
 </script>

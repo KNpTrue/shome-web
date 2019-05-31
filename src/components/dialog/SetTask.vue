@@ -35,7 +35,7 @@
               ></v-select>
               <helper-keyedit
                 :srckey="selkey"
-                :value="keyvalue"
+                :srcvalue="keyvalue"
                 @toChangeVal="toChangeVal"
               >
               </helper-keyedit>
@@ -94,10 +94,15 @@ export default {
   },
   watch: {
     dialog (val) {
-      if (!val) return
+      if (!val) { // init
+        this.step = 1
+        this.seldev = {}
+        this.selkey = {}
+        this.keyvalue = undefined
+        return
+      }
       this.task = this.srcTask
-      
-      if (this.dialog) {
+      if (this.dialog && this.srcTask.devid !== undefined) {
         this.seldev = this.getItemById(this.devlist, this.srcTask.devid)
         this.selkey = this.srcTask.key
         this.keyvalue = this.selkey.value
@@ -119,8 +124,9 @@ export default {
           type: this.selkey.type,
           value: this.keyvalue
         }
+        var key = JSON.parse(JSON.stringify(this.selkey))
+        key.value = this.keyvalue
         this.$emit('toSetTask', this.seldev.id, key)
-        this.step = 1
       } else {
         this.step++
       }
@@ -129,7 +135,7 @@ export default {
       return this.devlist.filter(dev => dev.online === true)
     },
     filterReadOnlyKey (keylist) {
-      if (keylist === undefined)  return []
+      if (keylist === undefined) return []
       return keylist.filter(key => key.mode === KEY.mode.readwrite)
     },
     toChangeVal (val) {

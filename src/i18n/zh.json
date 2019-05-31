@@ -54,5 +54,6 @@
   "select attributes to change": "选择要改变的属性",
   "value": "值",
   "addtask": "添加任务",
-  "modtask": "修改任务"
+  "modtask": "修改任务",
+  "enable": "启用"
 }

@@ -79,7 +79,11 @@ export default {
       this.$router.push({ path: '/dev-detail', query: { devId: dev.id } })
     },
     filterNoSelRoomDev () {
-      return this.devlist.filter(dev => this.isRoomSel(common.getItemById(this.roomlist, dev.roomid)))
+      return this.devlist.filter(dev => this.isRoomSel(common.getItemById(this.roomlist, dev.roomid))).sort(
+        (a, b) => {
+          return b.online -a.online
+        }
+      )
     },
     isDevOpen: keyMethods.isDevOpen,
     isDevHaveSwitch: keyMethods.isDevHaveSwitch,

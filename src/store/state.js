@@ -1,7 +1,7 @@
 export default {
   drawer: null,
   color: 'success',
-  image: 'https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-2.32103624.jpg',
+  image: './img/household.jpg',
   devlist: [ // 设备列表
     { name: '智能灯', id: 'aawdadwd', online: true, type: 2, roomid: 1, keylist: [{ name: 'isOpen', type: 2, mode: 1, value: true, unit: '' }, { name: 'bright', type: '4', mode: 1, value: '80/0/100', unit: '%' }, { name: 'R', type: '4', mode: 1, value: '80/0/100', unit: '%' }] },
     { name: '智能开关', id: 'awdascaw', online: true, type: 0, roomid: 2, keylist: [{ name: 'isOpen', type: 2, mode: 1, value: true, unit: '' }] },

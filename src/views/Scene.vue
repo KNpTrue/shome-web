@@ -17,10 +17,10 @@
         <v-flex
           v-for="set in setlist"
           :key="set.id"
-          sm6
+          sm12
           xs12
           md6
-          lg4
+          lg6
           style="padding-top: 0px; padding-bottom: 0px"
         >
           <material-card
@@ -36,16 +36,24 @@
                   flat
                   icon
                   style="margin-bottom: 15px"
-                  @click="onClickModName(set)"
+                  @click.prevent="onClickModName(set)"
                 >
                   <v-icon size="16" >mdi-pencil</v-icon>
+                </v-btn>
+                <v-btn
+                  flat
+                  icon
+                  style="margin-bottom: 15px"
+                  @click.prevent="onClickEnableSet(set)"
+                >
+                  <v-icon size="24" >mdi-play</v-icon>
                 </v-btn>
                 <v-btn
                   dark
                   icon
                   flat
                   style="float: right"
-                  @click="delSet(set)"
+                  @click.prevent="delSet(set)"
                 >
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
@@ -53,7 +61,7 @@
                   flat
                   icon
                   style="float:right"
-                  @click="addTask(set)"
+                  @click.prevent="addTask(set)"
                 >
                   <v-icon size="24">mdi-plus</v-icon>
                 </v-btn>
@@ -183,15 +191,28 @@ export default {
   },
   computed: {
     ...mapState(['todolist', 'setlist', 'selScene', 'color', 'devlist', 'roomlist']),
-    window () {
-      return this.selScene === 'todo' ? 0 : 1
+    window: {
+      get () {
+        return this.selScene === 'todo' ? 0 : 1
+      },
+      set (val) {
+        this.setSelScene(val == 0 ? 'todo' : 'set')
+      }
     }
   },
   methods: {
     ...mapMutations('websocket', ['sendToServer']),
+    ...mapMutations(['setSelScene']),
     onClickModName (obj) {
       this.dialog_name = true
       this.editObj = obj
+    },
+    onClickEnableSet(set) {
+      this.sendToServer(webMethods.packageMsg(WEB.method.set, WEB.type.set, {
+        id: set.id,
+        who: "enable",
+        what: {}
+      }))
     },
     modName (name) {
       this.dialog_name = false
@@ -204,7 +225,6 @@ export default {
     },
    setTask (devid, key) {
       this.dialog_task = false
-      console.log(this.editObj)
       var idx
       if (this.editTask === undefined) { //add
         idx = -1
@@ -225,6 +245,8 @@ export default {
         who: 'deltask',
         what: taskid
       }))
+      this.editObj = {}
+      this.editTask = {}
     },
     delSet (set) {
       this.sendToServer(webMethods.packageMsg(WEB.method.set, WEB.type.set, {

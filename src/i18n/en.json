@@ -54,5 +54,6 @@
   "select attributes to change": "Select attributes to change",
   "value": "Value",
   "addtask": "Add Task",
-  "modtask": "Modify Task"
+  "modtask": "Modify Task",
+  "enable": "Enable"
 }
